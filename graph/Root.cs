@@ -29,6 +29,44 @@ namespace graph
 		{
 			_Args = Environment.GetCommandLineArgs();
 		}
+
+		public RectangleF AryRect(PointF[] a )
+		{
+			if (a.Length == 0)
+				return new RectangleF(0, 0, 0, 0);
+			float minX = a[0].X;
+			float minY = a[0].Y;
+			float maxX = a[0].X;
+			float maxY = a[0].Y;
+			for (int i = 1; i < a.Length; i++)
+			{
+				if (a[i].X < minX) minX = a[i].X;
+				if (a[i].Y < minY) minY = a[i].Y;
+				if (a[i].X > maxX) maxX = a[i].X;
+				if (a[i].Y > maxY) maxY = a[i].Y;
+			}
+			return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+		}
+		public PointF AryCenter(PointF[] a)
+		{
+			if (a.Length == 0)
+				return new PointF(0, 0);
+			float sumX = 0;
+			float sumY = 0;
+			for (int i = 0; i < a.Length; i++)
+			{
+				sumX += a[i].X;
+				sumY += a[i].Y;
+			}
+			return new PointF(sumX / a.Length, sumY / a.Length);
+		}
+		/// <summary>
+		/// 線分配列を回転する
+		/// </summary>
+		/// <param name="pa">PointF Array</param>
+		/// <param name="cp">Anchor Point</param>
+		/// <param name="angleDegrees">Rotaion</param>
+		/// <returns></returns>
 		public PointF[] RotAry(PointF[] pa, PointF cp, float angleDegrees)
 		{
 			PointF[] result = new PointF[pa.Length];
@@ -47,6 +85,11 @@ namespace graph
 
 			return result;
 		}
+		/// <summary>
+		/// PointF ArrayをRectangleFに変換する
+		/// </summary>
+		/// <param name="rect"></param>
+		/// <returns></returns>
 		public PointF[] RectToArray(RectangleF rect)
 		{
 
@@ -58,6 +101,13 @@ namespace graph
 
 			return pa;
 		}
+		/// <summary>
+		/// PointFを線分でミラーリングする
+		/// </summary>
+		/// <param name="point"></param>
+		/// <param name="lineStart"></param>
+		/// <param name="lineEnd"></param>
+		/// <returns></returns>
 		public PointF MirrorPoint(PointF point, PointF lineStart, PointF lineEnd)
 		{
 			if (lineStart == lineEnd)
@@ -80,7 +130,13 @@ namespace graph
 
 			return new PointF(mirrorX, mirrorY);
 		}
-
+		/// <summary>
+		/// PointF Arrayを線分でミラーリングする
+		/// </summary>
+		/// <param name="pa"></param>
+		/// <param name="lineStart"></param>
+		/// <param name="lineEnd"></param>
+		/// <returns></returns>
 		public PointF[] MirrorAry(PointF[] pa, PointF lineStart, PointF lineEnd)
 		{
 			if (pa.Length == 0)
@@ -93,6 +149,14 @@ namespace graph
 			}
 			return result;
 		}
+		/// <summary>
+		/// PointF Arrayをスケールする
+		/// </summary>
+		/// <param name="pa"></param>
+		/// <param name="cp"></param>
+		/// <param name="sx"></param>
+		/// <param name="sy"></param>
+		/// <returns></returns>
 		public PointF[] ScaleAry(PointF[] pa, PointF cp, float sx, float sy)
 		{
 			PointF[] result = new PointF[pa.Length];
@@ -110,6 +174,13 @@ namespace graph
 
 			return result;
 		}
+		/// <summary>
+		/// PointF Arrayを移動する
+		/// </summary>
+		/// <param name="pa"></param>
+		/// <param name="dx"></param>
+		/// <param name="dy"></param>
+		/// <returns></returns>
 		public PointF[] MoveAry(PointF[] pa,  float dx, float dy)
 		{
 			PointF[] result = new PointF[pa.Length];
@@ -122,9 +193,25 @@ namespace graph
 
 			return result;
 		}
+		/// <summary>
+		/// PointF ArrayをRectangleFでクリッピングする
+		/// </summary>
+		/// <param name="rs"></param>
+		/// <param name="mask"></param>
+		/// <returns></returns>
 		public List<PointF[]> ClippingRect(List<PointF[]> rs, RectangleF mask)
 		{
 			return PolygonClipper.MaskRect(rs, mask);
+		}
+		public List<PointF[]> Clipping(
+			List<PointF[]> subjectPolygons,
+			List<PointF[]> clipPolygons,
+			ClipOperation operation)
+		{
+			return PolygonClipper.Execute(
+				subjectPolygons,
+				clipPolygons,
+				operation);
 		}
 	}
 }

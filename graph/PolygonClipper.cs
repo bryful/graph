@@ -7,9 +7,21 @@ namespace graph
 {
 	public enum ClipOperation
 	{
+		/// <summary>
+		/// 交差 (2つの図形の重なり部分)
+		/// </summary>
 		Intersection,
+		/// <summary>
+		/// 和 (2つの図形の合成)
+		/// </summary>
 		Union,
+		/// <summary>
+		/// 差 (1つの図形からもう1つの図形を引いた部分)
+		/// </summary>
 		Difference,
+		/// <summary>
+		/// 排他的論理和 (2つの図形の重なり部分を除いた部分)
+		/// </summary>
 		Xor
 	}
 

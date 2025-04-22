@@ -21,27 +21,39 @@ namespace graph_fw
 
 		public static void Usage()
 		{
-			string msg = "Usage: graph.exe  <filename>\n";
+			string msg = "Usage: graph.exe  <filename1> <filename2> ..\n";
 			Console.WriteLine(msg);
 		}
 
 		static int Main(string[] args)
 		{
 			int re = -1;
-			string fn = "";
+			List<string> fns = new List<string>();
 			if (args.Length > 0)
 			{
-				if (File.Exists(args[0]))
+				foreach (string s in args)
 				{
-					fn = args[0];
+					string fn = s;
+					string e = Path.GetExtension(fn).ToLower();
+					if (e=="")
+					{
+						fn += ".cs";
+					}
+					if((e== ".cs") || (e == ".csx")|| (e == ".csinc"))
+					{
+						if (File.Exists(fn))
+						{
+							fns.Add(fn);
+						}
+					}
 				}
 			}
-			if (fn != "")
+			if (fns.Count >0)
 			{
 				try
 				{
 					Scripts scripts = new Scripts();
-					string result = scripts.ExecuteFile(fn);
+					string result = scripts.ExecuteFile(fns.ToArray());
 					Console.WriteLine(result);
 					re = 0;
 				}

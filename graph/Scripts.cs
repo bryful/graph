@@ -42,7 +42,35 @@ namespace graph
 			}
 			return result;
 		}
-
+		public string ExecuteFile(string[] codes)
+		{
+			string result = "error!";
+			if (codes.Length<=0)
+			{
+				return "empty code!";
+			}
+			try
+			{
+				string script = "";
+				foreach (string code in codes)
+				{
+					if (File.Exists(code))
+					{
+						string s= File.ReadAllText(code);
+						if(s.Length > 0)
+						{
+							script += s;
+						}
+					}
+				}
+				result = ExecuteCode(script);
+			}
+			catch (Exception ex)
+			{
+				result = "Error2!\n" + ex.Message;
+			}
+			return result;
+		}
 
 		public string ExecuteCode(string code)
 		{
