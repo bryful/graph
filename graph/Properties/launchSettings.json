@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "graph": {
+      "commandName": "Project",
+      "commandLineArgs": "000.cs"
+    }
+  }
+}

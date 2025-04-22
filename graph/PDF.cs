@@ -1,0 +1,243 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using PdfSharp;
+using PdfSharp.Drawing;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using PdfSharp.Pdf;
+using System.Drawing;
+
+namespace graph
+{
+	public class PDF
+	{
+		private bool _UsedMM = true;
+		public bool UnitMM
+		{
+			get
+			{
+				return _UsedMM;
+			}
+		}
+		public bool UnitPoint
+		{
+			get
+			{
+				return !_UsedMM;
+			}
+		}
+		private PdfDocument? doc = null;
+		private PdfPage? page = null;
+		private XGraphics? gfx = null;
+		private double Widthmm = 210;
+		private double Heightmm = 297;
+		public PDF()
+		{
+			Init();
+		}
+		public PDF(bool usemm,double w, double h)
+		{
+			Init(usemm, w, h);
+		}
+		public PDF(double w, double h)
+		{
+			Init(true,w,h);
+		}
+		public PDF(int w, int h)
+		{
+			Init(false, w, h);
+		}
+		private XUnit PointV(double v)
+		{
+		if (_UsedMM)
+			{
+				return XUnit.FromMillimeter(v);
+			}
+			else
+			{
+				return XUnit.FromPoint(v);
+			}
+		}
+		private XPoint[] PointA(XPoint[] pnts)
+		{
+			XPoint[] a = new XPoint[pnts.Length];
+			for (int i = 0; i < pnts.Length; i++)
+			{
+				a[i] = new XPoint(PointV(pnts[i].X).Point, PointV(pnts[i].Y).Point);
+			}
+			return a;
+		}
+		private XPoint[] PointA(PointF[] pa)
+		{
+			List<XPoint> pnts = new List<XPoint>();
+			for (int i = 0; i < pa.Length; i++)
+			{
+				pnts.Add(new XPoint(PointV(pa[i].X).Point, PointV(pa[i].Y).Point));
+			}
+			return pnts.ToArray();
+		}
+		private XRect RectV(RectangleF rct)
+		{
+			return new XRect(
+				PointV(rct.X).Point,
+				PointV(rct.Y).Point,
+				PointV(rct.Width).Point,
+				PointV(rct.Height).Point
+			);
+		}
+		public void Init(bool UsedMM, double w,double h)
+		{
+			doc = new PdfDocument();
+			page = doc.AddPage();
+			_UsedMM = UsedMM;
+			page.Width = PointV(w);
+			page.Height = PointV(h);
+			Widthmm = page.Width.Millimeter;
+			Heightmm = page.Height.Millimeter;
+			gfx = XGraphics.FromPdfPage(page);
+			double cx = page.Width.Point / 2;
+			double cy = page.Height.Point / 2;
+			gfx.TranslateTransform(cx, cy);
+		}
+		public void Init()
+		{
+			doc = new PdfDocument();
+			page = doc.AddPage();
+			_UsedMM = true;
+			page.Size = PageSize.A4;
+			Widthmm = page.Width.Millimeter;
+			Heightmm = page.Height.Millimeter;
+			gfx = XGraphics.FromPdfPage(page);
+			double cx = page.Width.Point / 2;
+			double cy = page.Height.Point / 2;
+			gfx.TranslateTransform(cx, cy);
+		}
+		public bool Save(string fn)
+		{
+			bool ret = false;
+			if (doc != null)
+			{
+				try
+				{
+					if (File.Exists(fn))
+					{
+						File.Delete(fn);
+					}
+					doc.Save(fn);
+					ret = File.Exists(fn);
+				}
+				catch
+				{
+					ret = false;
+				}
+			}
+			return ret;
+		}
+		public void DrawLine(XPen p, double x0, double y0, double x1, double y1)
+		{
+			if (gfx != null)
+			{
+				gfx.DrawLine(p, 
+					PointV(x0).Point,
+					PointV(y0).Point,
+					PointV(x1).Point,
+					PointV(y1).Point
+				);
+			}
+		}
+
+		public void DrawLines(XPen p, PointF[] pa)
+		{
+			if ((gfx != null) && (pa.Length >= 0))
+			{
+				gfx.DrawLines(p, PointA(pa));
+			}
+		}
+		public void DrawLines(XPen p, List<PointF[]> pas)
+		{
+			if ((gfx != null) && (pas.Count >= 0))
+			{
+				for (int i = 0; i < pas.Count; i++)
+				{
+					DrawLines(p, pas[i]);
+				}
+			}
+		}
+		public void DrawPolygon(XBrush b, PointF[] pnts)
+		{
+			if ((gfx != null) && (pnts.Length >= 0))
+			{
+				gfx.DrawPolygon(b, PointA(pnts), XFillMode.Winding);
+			}
+		}
+		public void DrawPolygon(XBrush b, List<PointF[]> pnts)
+		{
+			if ((gfx != null) && (pnts.Count >= 0))
+			{
+				for (int i = 0; i < pnts.Count; i++)
+				{
+					DrawPolygon(b, pnts[i]);
+				}
+			}
+		}
+
+		public void DrawPolygon(XPen p, PointF[] pnts)
+		{
+			if ((gfx != null) && (pnts.Length >= 0))
+			{
+				gfx.DrawPolygon(p, PointA(pnts));
+			}
+		}
+		public void DrawPolygon(XPen p, List<PointF[]> pnts)
+		{
+			if ((gfx != null) && (pnts.Count >= 0))
+			{
+				for (int i = 0; i < pnts.Count; i++)
+				{
+					DrawPolygon(p, pnts[i]);
+				}
+			}
+		}
+		public void DrawPolygon(XPen p, XBrush b, PointF[] pnts)
+		{
+			if ((gfx != null) && (pnts.Length >= 0))
+			{
+				gfx.DrawPolygon(p, b, PointA(pnts), XFillMode.Winding);
+			}
+		}
+		public void DrawPolygon(XPen p, XBrush b, List<PointF[]> pnts)
+		{
+			if ((gfx != null) && (pnts.Count >= 0))
+			{
+				for (int i = 0; i < pnts.Count; i++)
+				{
+					DrawPolygon(p,b, pnts[i]);
+				}
+			}
+		}
+		public void DrawEllipse(XPen p, RectangleF rct)
+		{
+			if (gfx != null) 
+			{
+				gfx.DrawEllipse(p, RectV(rct));
+			}
+		}
+		public void DrawEllipse(XBrush b, RectangleF rct)
+		{
+			if (gfx != null)
+			{
+				gfx.DrawEllipse(b, RectV(rct));
+			}
+		}
+		public void DrawEllipse(XPen p,XBrush b, RectangleF rct)
+		{
+			if (gfx != null)
+			{
+				gfx.DrawEllipse(p,b, RectV(rct));
+			}
+		}
+	}
+}

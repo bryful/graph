@@ -1,0 +1,68 @@
+graph.exe
+
+C#で記述したコードをもとに図形を作成しPDF/DXFに変換するコマンドです。
+
+イラストレータで「パスの変形」を多重につかうと描画がおかしくなったりするので、多量のパス・オブジェクトを簡単に記述するために作りました。
+
+
+
+pdfの記述にはPDFSharpライブラリをそのまま使っています。
+同様にdxfはnetDxfライブラリを使用しています。
+
+使い方は、DOS窓で
+
+graph.exe コードファイル名
+
+で、ファイル保存名等はコードに記述します。
+
+サンプルで000.cd/001.cs/002.csが添付してあります。
+
+000.csはオブジェクトを円形に並べるサンプルPDF版。
+001.csは000.csと同じでdxf版。
+002.csはゼブラ模様を作成するサンプルです。
+
+pdfならば線幅とか色とかスタイルを指定できますが意外と面倒なので何も指定ができないdxfの方が使いやすいと思います。
+
+
+線分はPointFの配列で扱います。
+
+*********
+簡単な使い方説明
+コードは基本C#です。
+
+Step1 描画オブジェクトを作成
+
+DXF gr = new DXF();
+
+grがdxfオブジェクトです。pdfだとページの大きさや単位（ミリ・ポイント）の指定がありますがDXFにはないです。
+
+
+var w = 50;
+var h = 1500;
+
+PointF[] dot = new PointF[]{
+	new PointF(-w/2, -h/2),
+	new PointF(w/2, -h/2),
+	new PointF(w/2, h/2),
+	new PointF(-w/2, h/2),
+};
+
+線分は上記のような配列で指定します。
+
+RotAry()で回転
+MoveAry()で移動
+ScaleAry()で拡大ができます。
+
+
+gr.DrawLines(PointF[])で線
+gr.DrawPolygonp(PointF[])で閉じた線分を描画
+gr.DrawEllipse(RectangleF)で丸
+
+ClippingRect(PointF[],RectangleF)でクリッピングができます。
+
+
+最後Saveで書き出しします。
+g.Save(string)
+
+
+イラストレータで読み込み・配置で読み込み時に表示されるダイアログで
