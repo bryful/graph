@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using Clipper2Lib;
 
 namespace graph
 {
-
 	public enum ClipOperation
 	{
 		Intersection,
@@ -17,7 +13,7 @@ namespace graph
 		Xor
 	}
 
-	public class PolygonClipper
+	public static class PolygonClipper
 	{
 		public static List<PointF[]> Execute(
 			List<PointF[]> subjectPolygons,
@@ -29,14 +25,30 @@ namespace graph
 			var subject = ConvertToPathsD(subjectPolygons);
 			var clip = ConvertToPathsD(clipPolygons);
 
-			PathsD result = operation switch
+			PathsD result;
+
+			// C# 7.3 互換用に switch 文を従来の形式に変更
+			switch (operation)
 			{
-				ClipOperation.Intersection => Clipper.Intersect(subject, clip, fillRule, precision),
-				ClipOperation.Union => Clipper.Union(subject, clip, fillRule, precision),
-				ClipOperation.Difference => Clipper.Difference(subject, clip, fillRule, precision),
-				ClipOperation.Xor => Clipper.Xor(subject, clip, fillRule, precision),
-				_ => throw new ArgumentOutOfRangeException(nameof(operation), "Unsupported operation")
-			};
+				case ClipOperation.Intersection:
+					result = Clipper.Intersect(subject, clip, fillRule, precision);
+					break;
+
+				case ClipOperation.Union:
+					result = Clipper.Union(subject, clip, fillRule, precision);
+					break;
+
+				case ClipOperation.Difference:
+					result = Clipper.Difference(subject, clip, fillRule, precision);
+					break;
+
+				case ClipOperation.Xor:
+					result = Clipper.Xor(subject, clip, fillRule, precision);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(operation), "Unsupported operation");
+			}
 
 			return ConvertToPointFArrays(result);
 		}
@@ -81,7 +93,6 @@ namespace graph
 			return list.ToArray();
 		}
 
-	
 		public static List<PointF[]> MaskRect(
 			List<PointF[]> subjectPolygons,
 			RectangleF mask)

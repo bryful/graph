@@ -9,7 +9,8 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using PdfSharp.Pdf;
 using System.Drawing;
-
+using System.Windows;
+using System.IO;
 namespace graph
 {
 	public class PDF
@@ -29,9 +30,9 @@ namespace graph
 				return !_UsedMM;
 			}
 		}
-		private PdfDocument? doc = null;
-		private PdfPage? page = null;
-		private XGraphics? gfx = null;
+		private PdfDocument doc = null;
+		private PdfPage page = null;
+		private XGraphics gfx = null;
 		private double Widthmm = 210;
 		private double Heightmm = 297;
 		public PDF()

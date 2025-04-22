@@ -1,6 +1,6 @@
 
 DXF gr = new DXF();
-//ゼブラ模様を描く
+//繧ｼ繝悶Λ讓｡讒倥ｒ謠上￥
 var w = 50;
 var h = 1500;
 
@@ -24,7 +24,7 @@ for (var i = 0; i < rep; i++)
 	pa.Add(paa);
 }
 
-//クリッピング
+//繧ｯ繝ｪ繝�繝斐Φ繧ｰ
 List<PointF[]> pa2 = ClippingRect(pa,new RectangleF(-500,-500,1000,1000));
 
 gr.DrawPolygon(pa2);

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using netDxf;
 using netDxf.Entities;
 using System.Drawing;
-
+using System.IO;
+using System.Windows;
 namespace graph
 {
 	public class DXF

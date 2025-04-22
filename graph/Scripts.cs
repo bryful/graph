@@ -55,20 +55,20 @@ namespace graph
 			}
 			List<Assembly> assembly = new List<Assembly>()
 			{
-				Assembly.Load("System"),
-				Assembly.Load("System.IO"),
-				Assembly.Load("System.Drawing"),
+				//Assembly.Load("System"),
+				//Assembly.Load("System.IO"),
+				//Assembly.Load("System.Drawing"),
+				//Assembly.Load("PDFSharp"),
+				//Assembly.Load("netDxf"),
 
-				Assembly.GetAssembly(typeof(System.Dynamic.DynamicObject)),  // System.Code
-				Assembly.GetAssembly(typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo)),  // Microsoft.CSharp
-				Assembly.GetAssembly(typeof(System.Dynamic.ExpandoObject)),
-				Assembly.GetAssembly(typeof(System.Data.DataTable)),
-				Assembly.GetAssembly(typeof(System.Object)),
-				Assembly.GetAssembly(typeof(PDF)),
-				Assembly.GetAssembly(typeof(Root)),
-				Assembly.GetAssembly(typeof(DXF)),
-				Assembly.Load("PDFSharp"),
-				Assembly.Load("netDxf"),
+				//Assembly.GetAssembly(typeof(System.Dynamic.DynamicObject)),  // System.Code
+				//Assembly.GetAssembly(typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo)),  // Microsoft.CSharp
+				//Assembly.GetAssembly(typeof(System.Dynamic.ExpandoObject)),
+				//Assembly.GetAssembly(typeof(System.Data.DataTable)),
+				//Assembly.GetAssembly(typeof(System.Object)),
+				//Assembly.GetAssembly(typeof(PDF)),
+				//Assembly.GetAssembly(typeof(Root)),
+				//Assembly.GetAssembly(typeof(DXF)),
 				Assembly.GetExecutingAssembly()
 
 

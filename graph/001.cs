@@ -1,9 +1,9 @@
 
-// サイズ指定。trueであればmm、falseであればpoint
+// 繧ｵ繧､繧ｺ謖�螳壹Ｕrue縺ｧ縺ゅｌ縺ｰmm縲’alse縺ｧ縺ゅｌ縺ｰpoint
 DXF gr = new DXF();
 //XPen p = new XPen(XColors.Red, 1);
 //XBrush b = new XSolidBrush(XColors.Red);
-//基本の形
+//蝓ｺ譛ｬ縺ｮ蠖｢
 var w = 2;
 var h = 8;
 

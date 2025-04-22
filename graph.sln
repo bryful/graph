@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "graph", "graph\graph.csproj", "{08BBA88A-CCED-4989-BE05-6EC0197D6F76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "graph", "graph\graph.csproj", "{D9C7BAAC-DBDB-4C3E-B4EF-5F40EF55D5C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{08BBA88A-CCED-4989-BE05-6EC0197D6F76}.Debug|x64.ActiveCfg = Debug|x64
-		{08BBA88A-CCED-4989-BE05-6EC0197D6F76}.Debug|x64.Build.0 = Debug|x64
-		{08BBA88A-CCED-4989-BE05-6EC0197D6F76}.Release|x64.ActiveCfg = Release|x64
-		{08BBA88A-CCED-4989-BE05-6EC0197D6F76}.Release|x64.Build.0 = Release|x64
+		{D9C7BAAC-DBDB-4C3E-B4EF-5F40EF55D5C5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D9C7BAAC-DBDB-4C3E-B4EF-5F40EF55D5C5}.Debug|x64.Build.0 = Debug|Any CPU
+		{D9C7BAAC-DBDB-4C3E-B4EF-5F40EF55D5C5}.Release|x64.ActiveCfg = Release|Any CPU
+		{D9C7BAAC-DBDB-4C3E-B4EF-5F40EF55D5C5}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
