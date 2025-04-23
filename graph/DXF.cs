@@ -107,5 +107,18 @@ namespace graph
 			}
 
 		}
+		public void DrawEllipse(PointF cp, float radius)
+		{
+			if (radius > 0)
+			{
+				Ellipse ellipse = new Ellipse(new Vector2(cp.X, -cp.Y), radius*2, radius*2);
+				dxf.Entities.Add(ellipse);
+			}
+		}
+		public void DrawSemiCircle(PointF cp,float radius,float startAngle, float endAngle)
+		{
+			Arc semiCircle = new Arc(new Vector2(cp.X, -cp.Y), radius, startAngle, endAngle);
+			dxf.Entities.Add(semiCircle);
+		}
 	}
 }

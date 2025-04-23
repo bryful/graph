@@ -89,6 +89,15 @@ namespace graph
 				PointV(rct.Height).Point
 			);
 		}
+		private XRect RectV2(PointF cp, float radius)
+		{
+			return new XRect(
+				PointV(cp.X-radius).Point,
+				PointV(cp.Y - radius).Point,
+				PointV(rct.Width).Point,
+				PointV(rct.Height).Point
+			);
+		}
 		public void Init(bool UsedMM, double w,double h)
 		{
 			doc = new PdfDocument();
@@ -238,6 +247,52 @@ namespace graph
 			if (gfx != null)
 			{
 				gfx.DrawEllipse(p,b, RectV(rct));
+			}
+		}
+		public void DrawEllipse(XPen p, PointF cp,float radius)
+		{
+			if (gfx != null)
+			{
+				gfx.DrawEllipse(p, 
+					PointV(cp.X).Point, 
+					PointV(cp.Y).Point,
+					radius*2,radius*2);
+			}
+		}
+		public void DrawEllipse(XBrush b, PointF cp, float radius)
+		{
+			if (gfx != null)
+			{
+				gfx.DrawEllipse(b,
+					PointV(cp.X).Point,
+					PointV(cp.Y).Point,
+					radius * 2, radius * 2);
+			}
+		}
+		public void DrawEllipse(XPen p, XBrush b, PointF cp, float radius)
+		{
+			if (gfx != null)
+			{
+				gfx.DrawEllipse(p,b,
+					PointV(cp.X).Point,
+					PointV(cp.Y).Point,
+					radius * 2, radius * 2);
+			}
+		}
+		public void DrawSemiCircle(XPen pen, PointF center, float radius, double startAngle, double sweepAngle)
+		{
+			if (gfx != null)
+			{
+				// 半円を描画するための矩形領域を計算
+				var rect = new XRect(
+					PointV(center.X - radius).Point,
+					PointV(center.Y - radius).Point,
+					PointV(radius * 2).Point,
+					PointV(radius * 2).Point
+				);
+
+				// 半円を描画
+				gfx.DrawArc(pen, rect, startAngle, sweepAngle);
 			}
 		}
 	}

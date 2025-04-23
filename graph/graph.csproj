@@ -175,6 +175,9 @@
     <None Include="002.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="003.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="DXF.cs" />
     <Compile Include="InputDialog.cs">
       <SubType>Form</SubType>
