@@ -24,7 +24,7 @@ namespace graph_fw
 			string msg = "Usage: graph.exe  <filename1> <filename2> ..\n";
 			Console.WriteLine(msg);
 		}
-
+		[STAThread]
 		static int Main(string[] args)
 		{
 			int re = -1;

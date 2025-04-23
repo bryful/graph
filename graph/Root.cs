@@ -10,13 +10,18 @@ using PdfSharp.Drawing;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.ComponentModel;
+using System.Windows.Forms;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Scripting.Hosting;
+using Microsoft.CodeAnalysis.Scripting;
+using System.Diagnostics;
 
 namespace graph
 {
 	public class Root
 	{
 		private string[] _Args = new string[0];
-		public string[] Args
+		public string[] CommandLineArgs
 		{
 			get
 			{
@@ -90,7 +95,7 @@ namespace graph
 		/// </summary>
 		/// <param name="rect"></param>
 		/// <returns></returns>
-		public PointF[] RectToArray(RectangleF rect)
+		public PointF[] RectToAry(RectangleF rect)
 		{
 
 			PointF[] pa = new PointF[4];
@@ -212,6 +217,170 @@ namespace graph
 				subjectPolygons,
 				clipPolygons,
 				operation);
+		}
+		public string SaveFileDialog(string path ="",string title="SaveDialog", string filter="*.*|*.*")
+		{
+			string ret = "";
+			using (SaveFileDialog dlg = new SaveFileDialog())
+			{
+				if(string.IsNullOrEmpty(path))
+				{
+					dlg.InitialDirectory= Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+				}
+				else
+				{
+					if (File.Exists(path))
+					{
+						dlg.InitialDirectory = Path.GetDirectoryName(path);
+						dlg.FileName = Path.GetFileName(path);
+					}else if (Directory.Exists(path))
+					{
+						dlg.InitialDirectory = path;
+					}
+					else
+					{
+						dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+					}
+				}
+
+					dlg.FileName = path;
+				dlg.Title = title;
+				dlg.Filter = filter;
+				dlg.RestoreDirectory = true;
+				if (dlg.ShowDialog() == DialogResult.OK)
+				{
+					ret = dlg.FileName;
+				}
+			}
+			return ret;
+		}
+		public string OpenFileDialog(string path = "", string title = "OpenDialog", string filter = "*.*|*.*")
+		{
+			string ret = "";
+			using (OpenFileDialog dlg = new OpenFileDialog())
+			{
+				if (string.IsNullOrEmpty(path))
+				{
+					dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+				}
+				else
+				{
+					if (File.Exists(path))
+					{
+						dlg.InitialDirectory = Path.GetDirectoryName(path);
+						dlg.FileName = Path.GetFileName(path);
+					}
+					else if (Directory.Exists(path))
+					{
+						dlg.InitialDirectory = path;
+					}
+					else
+					{
+						dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+					}
+				}
+
+				dlg.FileName = path;
+				dlg.Title = title;
+				dlg.Filter = filter;
+				dlg.RestoreDirectory = true;
+				if (dlg.ShowDialog() == DialogResult.OK)
+				{
+					ret = dlg.FileName;
+				}
+			}
+			return ret;
+		}
+		public string InputDialog(string txt = "", string title = "InputDialog")
+		{
+			string ret = "";
+			using (InputDialog dlg = new InputDialog())
+			{
+				dlg.Text = txt;
+				dlg.Title = title;
+				if (dlg.ShowDialog() == DialogResult.OK)
+				{
+					ret = dlg.Text;
+				}
+			}
+			return ret;
+		}
+		public async Task<double> CalcTextAsync(string s)
+		{
+			return await CSharpScript.EvaluateAsync<double>(s);
+		}
+		public string Call(string[] args)
+		{
+			string arg = "";
+			string app = "";
+			if (args.Length > 0)
+			{
+				foreach (string s in args)
+				{
+					string s1 = s.Trim();
+					if (arg != "")
+					{
+						arg += " ";
+					}
+					if (s1.IndexOf(" ") >= 0)
+					{
+						s1 = "\"" + s1 + "\"";
+					}
+					if(app=="")
+					{
+						app = s1;
+					}
+					else
+					{
+						arg += s1;
+					}
+				}
+			}
+			ProcessStartInfo processInfo = new ProcessStartInfo
+			{
+				FileName = app,
+				Arguments = arg,
+				CreateNoWindow = true,
+				RedirectStandardOutput = true,
+				UseShellExecute = false,
+				WorkingDirectory = Environment.CurrentDirectory,
+				RedirectStandardError = true,
+			};
+
+			var output = new StringBuilder();
+			var timeout = TimeSpan.FromMinutes(2); // 2分だけ待つ
+			using (var process = Process.Start(processInfo))
+			{
+				var stdout = new StringBuilder();
+				var stderr = new StringBuilder();
+
+				process.OutputDataReceived += (sender, e) => { if (e.Data != null) { stdout.AppendLine(e.Data); } }; // 標準出力に書き込まれた文字列を取り出す
+				process.ErrorDataReceived += (sender, e) => { if (e.Data != null) { stderr.AppendLine(e.Data); } }; // 標準エラー出力に書き込まれた文字列を取り出す
+				process.BeginOutputReadLine();
+				process.BeginErrorReadLine();
+
+				var isTimedOut = false;
+
+				if (!process.WaitForExit((int)timeout.TotalMilliseconds))
+				{
+					isTimedOut = true;
+					process.Kill();
+				}
+				process.CancelOutputRead();
+				process.CancelErrorRead();
+
+				output.AppendLine(stdout.ToString());
+				output.AppendLine(stderr.ToString());
+				if (isTimedOut)
+					output.AppendLine("TIMEOUT AT " + DateTimeOffset.Now);
+			}
+			return output.ToString();  // 
+			/*
+			Process process = Process.Start(processInfo);
+			process.WaitForExit(5000);
+
+			return process.StandardOutput.ReadToEnd();
+			*/
 		}
 	}
 }

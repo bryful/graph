@@ -1,5 +1,8 @@
-
-DXF gr = new DXF();
+/*
+ * DXFを描画保存するサンプル
+ * ゼブラ模様
+ */
+DXF dxf2 = new DXF();
 //ゼブラ模様を描く
 var w = 50;
 var h = 1500;
@@ -27,10 +30,10 @@ for (var i = 0; i < rep; i++)
 //クリッピング
 List<PointF[]> pa2 = ClippingRect(pa,new RectangleF(-500,-500,1000,1000));
 
-gr.DrawPolygon(pa2);
+dxf2.DrawPolygon(pa2);
 
-var fn = "Zebra3.dxf";
-if (DXF.Save(fn)==true)
+var fn = "Zebra.dxf";
+if (dxf2.Save(fn)==true)
 {
 	Console.WriteLine(fn +" created");
 }

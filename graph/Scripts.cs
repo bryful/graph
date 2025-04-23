@@ -4,7 +4,7 @@ using System.Linq;
 using System.Data;
 using System.Text;
 using System.Reflection;
-
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -14,6 +14,8 @@ using Microsoft.CodeAnalysis.Scripting;
 using System.IO;
 using PdfSharp;
 using PdfSharp.Drawing;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 
 namespace graph
@@ -75,17 +77,20 @@ namespace graph
 		public string ExecuteCode(string code)
 		{
 			Root root= new Root();
-
 			string result = "error!";
-			if(string.IsNullOrEmpty(code))
+			try
 			{
-				return "empty code";
-			}
-			List<Assembly> assembly = new List<Assembly>()
+
+				if (string.IsNullOrEmpty(code))
+				{
+					return "empty code";
+				}
+				List<Assembly> assembly = new List<Assembly>()
 			{
 				//Assembly.Load("System"),
 				//Assembly.Load("System.IO"),
 				//Assembly.Load("System.Drawing"),
+				//Assembly.Load("System.Windows.Form"),
 				//Assembly.Load("PDFSharp"),
 				//Assembly.Load("netDxf"),
 
@@ -102,16 +107,19 @@ namespace graph
 
 			};
 
-			List<string> import = new List<string>()
+				List<string> import = new List<string>()
 			{
 				"System",
 				"System.Dynamic",
-				"System.Linq", 
+				"System.Linq",
 				"System.Text",
 				"System.IO",
-				"System.Collections.Generic", 
+				"System.Collections.Generic",
 				"System.Data",
 				"System.Drawing",
+				"System.Drawing.Drawing2D",
+				"System.Drawing.Imaging",
+				"System.Windows.Forms",
 				"PdfSharp",
 				"PdfSharp.Drawing",
 				"netDxf",
@@ -121,16 +129,14 @@ namespace graph
 
 			};
 
-			var opt = ScriptOptions.Default.AddReferences(assembly).AddImports(import);
-
-			try
-			{
+				var opt = ScriptOptions.Default.AddReferences(assembly).AddImports(import);
 				var script = CSharpScript.Create(code, opt,typeof(Root));
 				script.RunAsync(root);
 				result = "";
 			}
 			catch (CompilationErrorException ex)
 			{
+				Console.WriteLine(code);
 				result = "compile Error!\n" + ex.Message;
 			}
 			catch (Exception ex)
@@ -140,5 +146,17 @@ namespace graph
 
 			return result;
 		}
+		public Bitmap MakeBitMap(int w,int h)
+		{
+			Bitmap bitmap = new Bitmap(w, h);
+			Graphics g = Graphics.FromImage(bitmap);
+			g.Clear(Color.White);
+			g.SmoothingMode = SmoothingMode.AntiAlias;
+			g.InterpolationMode = InterpolationMode.Bilinear;
+			g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			bitmap.Save("test.png", System.Drawing.Imaging.ImageFormat.Png);
+			return bitmap;
+		}
+		
 	}
 }
