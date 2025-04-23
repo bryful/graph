@@ -92,6 +92,7 @@ namespace graph
 					DrawPolygon(pa[i]);
 				}
 			}
+			
 		}
 		public void DrawEllipse(RectangleF rct)
 		{
