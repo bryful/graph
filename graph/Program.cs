@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using graph;
 using System.IO;
+using System.Security.Policy;
 
 namespace graph_fw
 {
@@ -21,39 +22,65 @@ namespace graph_fw
 
 		public static void Usage()
 		{
-			string msg = "Usage: graph.exe  <filename1> <filename2> ..\n";
+			string msg = "Usage: graph.exe  <filename1> <filename2> .. [-arg] [arg1] [arg2]...\n";
+			
+			msg += "  -arg 以前が読み込むスクリプトファイル名、以後が引数として受け取れる\n";
 			Console.WriteLine(msg);
 		}
 		[STAThread]
 		static int Main(string[] args)
 		{
 			int re = -1;
-			List<string> fns = new List<string>();
-			if (args.Length > 0)
+
+			if (args.Length == 0)
 			{
-				foreach (string s in args)
+				Usage();
+				return -1;
+			}	
+
+			List<string> filenames = new List<string>();
+			List<string> commandArgs = new List<string>();
+
+			bool isArg = false;
+			for (int i = 0; i < args.Length; i++)
+			{
+				string cm = args[i].ToLower();
+				if (
+					(cm.IndexOf("-arg")==0)|| (cm.IndexOf("/arg")==0))
 				{
-					string fn = s;
+					isArg = true;
+					continue;
+				}
+				if (isArg==false)
+				{
+					string fn = args[i];
 					string e = Path.GetExtension(fn).ToLower();
-					if (e=="")
+					if (e == "")
 					{
 						fn += ".cs";
 					}
-					if((e== ".cs") || (e == ".csx")|| (e == ".csinc"))
+					if ((e == ".cs") || (e == ".csx") || (e == ".csinc"))
 					{
 						if (File.Exists(fn))
 						{
-							fns.Add(fn);
+							filenames.Add(fn);
 						}
 					}
 				}
+				else
+				{
+					commandArgs.Add(args[i]);
+				}
 			}
-			if (fns.Count >0)
+
+
+			if (filenames.Count >0)
 			{
 				try
 				{
 					Scripts scripts = new Scripts();
-					string result = scripts.ExecuteFile(fns.ToArray());
+					scripts.CommandLineArgs = commandArgs.ToArray();
+					string result = scripts.ExecuteFile(filenames.ToArray());
 					Console.WriteLine(result);
 					re = 0;
 				}

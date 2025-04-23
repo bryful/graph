@@ -28,6 +28,10 @@ namespace graph
 				return _Args;
 			}
 		}
+		public void SetCommandLineArgs(string[] args)
+		{
+			_Args = args;
+		}
 		public PDF PDF = new PDF();
 		public DXF DXF = new DXF();
 		public Root()

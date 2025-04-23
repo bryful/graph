@@ -22,6 +22,7 @@ namespace graph
 {
 	public class Scripts
 	{
+		public string[] CommandLineArgs { get; set; } = new string[0];		
 		public Scripts() 
 		{
 		}
@@ -77,6 +78,7 @@ namespace graph
 		public string ExecuteCode(string code)
 		{
 			Root root= new Root();
+			root.SetCommandLineArgs(CommandLineArgs);
 			string result = "error!";
 			try
 			{
