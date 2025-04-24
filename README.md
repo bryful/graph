@@ -57,12 +57,16 @@ dxf.Save("foo.dxf");
 座標系はAfter EfefctsやC#のBitmapと同じ右がプラス、上がマイナスになります。
 
 DXFクラスは以下の関数があります。
-|                                                                  |                                        |
-| ---------------------------------------------------------------- | -------------------------------------- |
-| public void DrawLine(double x0, double y0, double x1, double y1) | 座標指定で線を描く                     |
-| public void DrawLines(PointF[] pa)                               | 線分配列で線を描く                     |
-| public void DrawPolygon(PointF[] pnts)                           | 線分配列で閉じた線（面の境界線）を描く |
-| public void DrawEllipse(RectangleF rct)                          | 円を描く                               |
+|                                                                                     |                                        |
+| ----------------------------------------------------------------------------------- | -------------------------------------- |
+| public void DrawLine(double x0, double y0, double x1, double y1)                    | 座標指定で線を描く                     |
+| public void DrawLines(PointF[] pa)                                                  | 線分配列で線を描く                     |
+| public void DrawPolygon(PointF[] pnts)                                              | 線分配列で閉じた線（面の境界線）を描く |
+| public void DrawEllipse(RectangleF rct)                                             | 円を描く                               |
+| public void DrawEllipse(PointF cp, float radius)                                    | 円を描く                               |
+| public void DrawSemiCircle(PointF cp,float radius,float startAngle, float endAngle) | 円弧を描くく                           |
+
+
 
 引数はList＜PointF[]＞の形式にも対応しています。
 
