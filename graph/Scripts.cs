@@ -127,6 +127,7 @@ namespace graph
 				"netDxf",
 				"graph.DXF",
 				"graph.PDF",
+				"graph.GR",
 				"graph",
 
 			};

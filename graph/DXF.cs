@@ -117,7 +117,7 @@ namespace graph
 		}
 		public void DrawSemiCircle(PointF cp,float radius,float startAngle, float endAngle)
 		{
-			Arc semiCircle = new Arc(new Vector2(cp.X, -cp.Y), radius, startAngle, endAngle);
+			Arc semiCircle = new Arc(new Vector2(cp.X, -cp.Y), radius, -startAngle - endAngle, -startAngle);
 			dxf.Entities.Add(semiCircle);
 		}
 	}

@@ -32,8 +32,9 @@ namespace graph
 		{
 			_Args = args;
 		}
-		public PDF PDF = new PDF();
-		public DXF DXF = new DXF();
+		//public PDF PDF = new PDF();
+		//public DXF DXF = new DXF();
+		//public GR GR = new GR(0, 0);
 		public Root()
 		{
 			_Args = Environment.GetCommandLineArgs();
@@ -386,5 +387,39 @@ namespace graph
 			return process.StandardOutput.ReadToEnd();
 			*/
 		}
-	}
+		public PointF[] CreateRect(float x,float y, float w,float h)
+		{
+			PointF[] pa = new PointF[4];
+			pa[0] = new PointF(x, y);
+			pa[1] = new PointF(x + w, y);
+			pa[2] = new PointF(x + w, y + h);
+			pa[3] = new PointF(x, y + h);
+			return pa;
+		}
+		public PointF[] CreateRect(RectangleF rect)
+		{
+			PointF[] pa = new PointF[4];
+			pa[0] = new PointF(rect.Left, rect.Top);
+			pa[1] = new PointF(rect.Right, rect.Top);
+			pa[2] = new PointF(rect.Right, rect.Bottom);
+			pa[3] = new PointF(rect.Left, rect.Bottom);
+			return pa;
+		}
+		public PointF[] CreateTriangle(int count, float radius)
+		{
+			if(count < 3)
+			{
+				count = 3;
+			}
+			PointF[] pa = new PointF[count];
+			for (int i = 0; i < count; i++)
+			{
+				double angle = 2 * Math.PI * i / count;
+				pa[i] = new PointF(
+					(float)(radius * Math.Cos(angle)),
+					(float)(radius * Math.Sin(angle)));
+			}
+			return pa;
+		}
+		}
 }

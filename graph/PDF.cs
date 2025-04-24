@@ -94,8 +94,8 @@ namespace graph
 			return new XRect(
 				PointV(cp.X-radius).Point,
 				PointV(cp.Y - radius).Point,
-				PointV(rct.Width).Point,
-				PointV(rct.Height).Point
+				PointV(radius*2).Point,
+				PointV(radius * 2).Point
 			);
 		}
 		public void Init(bool UsedMM, double w,double h)
@@ -254,8 +254,8 @@ namespace graph
 			if (gfx != null)
 			{
 				gfx.DrawEllipse(p, 
-					PointV(cp.X).Point, 
-					PointV(cp.Y).Point,
+					PointV(cp.X-radius).Point, 
+					PointV(cp.Y- radius).Point,
 					radius*2,radius*2);
 			}
 		}
@@ -264,8 +264,8 @@ namespace graph
 			if (gfx != null)
 			{
 				gfx.DrawEllipse(b,
-					PointV(cp.X).Point,
-					PointV(cp.Y).Point,
+					PointV(cp.X - radius).Point,
+					PointV(cp.Y - radius).Point,
 					radius * 2, radius * 2);
 			}
 		}
@@ -274,8 +274,8 @@ namespace graph
 			if (gfx != null)
 			{
 				gfx.DrawEllipse(p,b,
-					PointV(cp.X).Point,
-					PointV(cp.Y).Point,
+					PointV(cp.X - radius).Point,
+					PointV(cp.Y - radius).Point,
 					radius * 2, radius * 2);
 			}
 		}
