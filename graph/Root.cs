@@ -40,7 +40,7 @@ namespace graph
 			_Args = Environment.GetCommandLineArgs();
 		}
 
-		public RectangleF AryRect(PointF[] a )
+		static public RectangleF AryRect(PointF[] a )
 		{
 			if (a.Length == 0)
 				return new RectangleF(0, 0, 0, 0);
@@ -57,7 +57,7 @@ namespace graph
 			}
 			return new RectangleF(minX, minY, maxX - minX, maxY - minY);
 		}
-		public PointF AryCenter(PointF[] a)
+		static public PointF AryCenter(PointF[] a)
 		{
 			if (a.Length == 0)
 				return new PointF(0, 0);
@@ -77,7 +77,7 @@ namespace graph
 		/// <param name="cp">Anchor Point</param>
 		/// <param name="angleDegrees">Rotaion</param>
 		/// <returns></returns>
-		public PointF[] RotAry(PointF[] pa, PointF cp, float angleDegrees)
+		static public PointF[] RotAry(PointF[] pa, PointF cp, float angleDegrees)
 		{
 			PointF[] result = new PointF[pa.Length];
 			double angleRadians = angleDegrees * Math.PI / 180.0;
@@ -100,7 +100,7 @@ namespace graph
 		/// </summary>
 		/// <param name="rect"></param>
 		/// <returns></returns>
-		public PointF[] RectToAry(RectangleF rect)
+		static public PointF[] RectToAry(RectangleF rect)
 		{
 
 			PointF[] pa = new PointF[4];
@@ -118,7 +118,7 @@ namespace graph
 		/// <param name="lineStart"></param>
 		/// <param name="lineEnd"></param>
 		/// <returns></returns>
-		public PointF MirrorPoint(PointF point, PointF lineStart, PointF lineEnd)
+		static public PointF MirrorPoint(PointF point, PointF lineStart, PointF lineEnd)
 		{
 			if (lineStart == lineEnd)
 				return point; // 線が無効な場合はそのまま返す
@@ -147,7 +147,7 @@ namespace graph
 		/// <param name="lineStart"></param>
 		/// <param name="lineEnd"></param>
 		/// <returns></returns>
-		public PointF[] MirrorAry(PointF[] pa, PointF lineStart, PointF lineEnd)
+		static public PointF[] MirrorAry(PointF[] pa, PointF lineStart, PointF lineEnd)
 		{
 			if (pa.Length == 0)
 				return pa; // 空の配列の場合はそのまま返す
@@ -167,7 +167,7 @@ namespace graph
 		/// <param name="sx"></param>
 		/// <param name="sy"></param>
 		/// <returns></returns>
-		public PointF[] ScaleAry(PointF[] pa, PointF cp, float sx, float sy)
+		static public PointF[] ScaleAry(PointF[] pa, PointF cp, float sx, float sy)
 		{
 			PointF[] result = new PointF[pa.Length];
 
@@ -191,7 +191,7 @@ namespace graph
 		/// <param name="dx"></param>
 		/// <param name="dy"></param>
 		/// <returns></returns>
-		public PointF[] MoveAry(PointF[] pa,  float dx, float dy)
+		static public PointF[] MoveAry(PointF[] pa,  float dx, float dy)
 		{
 			PointF[] result = new PointF[pa.Length];
 
@@ -209,11 +209,11 @@ namespace graph
 		/// <param name="rs"></param>
 		/// <param name="mask"></param>
 		/// <returns></returns>
-		public List<PointF[]> ClippingRect(List<PointF[]> rs, RectangleF mask)
+		static public List<PointF[]> ClippingRect(List<PointF[]> rs, RectangleF mask)
 		{
 			return PolygonClipper.MaskRect(rs, mask);
 		}
-		public List<PointF[]> Clipping(
+		static public List<PointF[]> Clipping(
 			List<PointF[]> subjectPolygons,
 			List<PointF[]> clipPolygons,
 			ClipOperation operation)
@@ -223,6 +223,42 @@ namespace graph
 				clipPolygons,
 				operation);
 		}
+		/// <summary>
+		/// 線分point0,point1,point2の頂点point1での角度を計算する
+		/// </summary>
+		/// <param name="point0"></param>
+		/// <param name="point1"></param>
+		/// <param name="point2"></param>
+		/// <returns></returns>
+		static public double GetAngleAtVertex(PointF point0, PointF point1, PointF point2)
+		{
+			// ベクトルA = Point1 - Point0
+			double ax = point0.X - point1.X;
+			double ay = point0.Y - point1.Y;
+
+			// ベクトルB = Point2 - Point1
+			double bx = point2.X - point1.X;
+			double by = point2.Y - point1.Y;
+
+			// 内積とベクトル長を計算
+			double dot = ax * bx + ay * by;
+			double magA = Math.Sqrt(ax * ax + ay * ay);
+			double magB = Math.Sqrt(bx * bx + by * by);
+
+			if (magA == 0 || magB == 0) return 0; // ゼロ除算防止
+
+			double cosTheta = dot / (magA * magB);
+
+			// 丸め誤差対策：cos値を [-1, 1] に制限
+			cosTheta = Math.Max(-1.0, Math.Min(1.0, cosTheta));
+
+			// 弧度 → 度 に変換
+			double angleRad = Math.Acos(cosTheta);
+			double angleDeg = angleRad * 180.0 / Math.PI;
+
+			return angleDeg;
+		}
+
 		public string SaveFileDialog(string path ="",string title="SaveDialog", string filter="*.*|*.*")
 		{
 			string ret = "";
@@ -387,7 +423,7 @@ namespace graph
 			return process.StandardOutput.ReadToEnd();
 			*/
 		}
-		public PointF[] CreateRect(float x,float y, float w,float h)
+		static public PointF[] CreateRect(float x,float y, float w,float h)
 		{
 			PointF[] pa = new PointF[4];
 			pa[0] = new PointF(x, y);
@@ -396,7 +432,7 @@ namespace graph
 			pa[3] = new PointF(x, y + h);
 			return pa;
 		}
-		public PointF[] CreateRect(RectangleF rect)
+		static public PointF[] CreateRect(RectangleF rect)
 		{
 			PointF[] pa = new PointF[4];
 			pa[0] = new PointF(rect.Left, rect.Top);
@@ -405,7 +441,7 @@ namespace graph
 			pa[3] = new PointF(rect.Left, rect.Bottom);
 			return pa;
 		}
-		public PointF[] CreateTriangle(int count, float radius)
+		static public PointF[] CreateTriangle(int count, float radius)
 		{
 			if(count < 3)
 			{
