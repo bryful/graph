@@ -67,6 +67,7 @@ DXFクラスは以下の関数があります。
 引数はList＜PointF[]＞の形式にも対応しています。
 
 PDFファイルもPDFクラスで作成できます。基本的にDXFと同じ使い方です。
+同じようにBMPクラス、統合したGRクラスも作成しました
 
 # サンプルの説明
 
@@ -95,7 +96,12 @@ PDFファイルもPDFクラスで作成できます。基本的にDXFと同じ�
 | public string SaveFileDialog(string path ="",string title="SaveDialog", string filter="*.*&#124;*.*")                             | 保存ダイアログ                           |                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | public string OpenFileDialog(string path = "", string title = "OpenDialog", string filter = "*.*&#124;*.*")                       | 読み込みダイアログ                       |                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | public string InputDialog(string txt = "", string title = "InputDialog")                                                          | 入力ダイアログ                           |                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| public string Call(string[] args)                                                                                                 | コマンド呼び出し、標準出力を返値にかえす |                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| public string Call(string[] args)                                                                                                 | コマンド呼び出し、標準出力を返値にかえす |
+| public PointF[] CreateRect(float x,float y, float w,float h) <br>public PointF[] CreateRect(RectangleF rect)                      | 矩形のPointF[]を作成                     |
+| public PointF[] CreateTriangle(int count, float radius)                                                                           | 多角形のPointF[]を作成                   |
+
+
+                                                                                                                                                                                                                                                                                              |
 
 # DXFファイル使用時の注意
 DXFファイルは単位系の情報が保存されていないので、イラストレーター等で読み込むとき必ずそれを指定するダイアログが表示されます。
