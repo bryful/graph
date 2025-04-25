@@ -9,12 +9,12 @@ pdf.Init(false, 500, 500);
 
 //基本の形
 // パスで四角形
-var w = 2;
-var h = 8;
+var w = 2f;
+var h = 8f;
 PointF[] dot = new PointF[]{
-	new PointF(-w/2, -h/2),
-	new PointF(w/2, -h/2),
-	new PointF(w/2, h/2),
+	new PointF(-w/2f, -h/2f),
+	new PointF(w/2f, -h/2f),
+	new PointF(w/2f, h/2f),
 	new PointF(-w/2, h/2),
 };
 
@@ -23,8 +23,8 @@ dot = MoveAry(dot, 0, -200);
 
 
 //回転角度2度で複製描画
-var rot = 2;
-var rotCount = 360 / rot;
+var rot = 2f;
+var rotCount = 360f / rot;
 XPen p = new XPen(XColors.Black, 0.5);
 XBrush b = new XSolidBrush(XColors.Red);
 

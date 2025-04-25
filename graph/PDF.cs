@@ -11,6 +11,7 @@ using PdfSharp.Pdf;
 using System.Drawing;
 using System.Windows;
 using System.IO;
+using System.Diagnostics;
 namespace graph
 {
 	public class PDF
@@ -232,7 +233,11 @@ namespace graph
 		{
 			if (gfx != null) 
 			{
-				gfx.DrawEllipse(p, RectV(rct));
+				double cx = PointV(rct.X ).Point;
+				double cy = PointV(rct.Y ).Point;
+				double r1 = PointV(rct.Width).Point;
+				double r2 = PointV(rct.Height).Point;
+				gfx.DrawEllipse(p, cx,cy,r1,r2);
 			}
 		}
 		public void DrawEllipse(XBrush b, RectangleF rct)
@@ -253,10 +258,12 @@ namespace graph
 		{
 			if (gfx != null)
 			{
-				gfx.DrawEllipse(p, 
-					PointV(cp.X-radius).Point, 
-					PointV(cp.Y- radius).Point,
-					radius*2,radius*2);
+				gfx.DrawEllipse(p,
+					PointV(cp.X-radius).Point,
+					PointV(cp.Y-radius).Point,
+					PointV(radius*2).Point,
+					PointV(radius * 2).Point
+					);
 			}
 		}
 		public void DrawEllipse(XBrush b, PointF cp, float radius)
@@ -264,9 +271,7 @@ namespace graph
 			if (gfx != null)
 			{
 				gfx.DrawEllipse(b,
-					PointV(cp.X - radius).Point,
-					PointV(cp.Y - radius).Point,
-					radius * 2, radius * 2);
+					RectV2(cp, radius));
 			}
 		}
 		public void DrawEllipse(XPen p, XBrush b, PointF cp, float radius)
@@ -274,9 +279,8 @@ namespace graph
 			if (gfx != null)
 			{
 				gfx.DrawEllipse(p,b,
-					PointV(cp.X - radius).Point,
-					PointV(cp.Y - radius).Point,
-					radius * 2, radius * 2);
+					RectV2(cp, radius)
+					);
 			}
 		}
 		public void DrawSemiCircle(XPen pen, PointF center, float radius, double startAngle, double sweepAngle)
@@ -293,6 +297,8 @@ namespace graph
 
 				// 半円を描画
 				gfx.DrawArc(pen, rect, startAngle, sweepAngle);
+				XPen aa =new XPen(XColors.Red, 0.5f);
+				aa.DashStyle =XDashStyle.Dot;
 			}
 		}
 	}

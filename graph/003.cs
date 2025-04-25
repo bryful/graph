@@ -5,8 +5,8 @@
 DXF dxf = new DXF();
 
 PointF cp = new PointF(0, 0);
-dxf.DrawSemiCircle(cp, 100, 0,270);
-dxf.DrawEllipse(cp, 80);
+dxf.DrawSemiCircle(cp, 100f, 0,270f);
+dxf.DrawEllipse(cp, 80f);
 
 var fn = "Ellipse.dxf";
 if (dxf.Save(fn)==true)
